@@ -1,13 +1,13 @@
 window.onload = function(){
 
-    var press = function(event){
+    var keyPressed = function(event){
         var key = identify(event);
-        highLight(key);
+        pressDown(key);
     };
 
-    var unpress = function(event){
+    var keyReleased = function(event){
         var key = identify(event);
-        normalize(key);
+        releaseUp(key);
     }
 
     var identify = function(event){
@@ -58,7 +58,7 @@ window.onload = function(){
         return keyName;
     }
 
-    var highLight = function(keyName){
+    var pressDown = function(keyName){
         var key = document.getElementsByClassName(keyName);
         for(var i = 0; i < key.length; i++){
             // *old code for adding class to object
@@ -75,7 +75,7 @@ window.onload = function(){
         
     }
 
-    var normalize = function(keyName){
+    var releaseUp = function(keyName){
         var key = document.getElementsByClassName(keyName);
         for(var i = 0; i < key.length; i++){
             // *old code for removing class from object
@@ -93,6 +93,47 @@ window.onload = function(){
         
     }
 
-    document.onkeydown = press;
-    document.onkeyup = unpress;
+    var input = function(event){
+        console.log(code);
+        var Ascii = {
+            '188': '44',
+            '109': '45',
+            '190': '46',
+            '191': '47',
+            '192': '96',
+            '220': '92',
+            '222': '39',
+            '221': '91',
+            '219': '93',
+            '173': '45',
+            '187': '61', //IE Key codes
+            '186': '59', //IE Key codes
+            '189': '45', //IE Key codes
+        };
+        var code = event.which || event.keyCode;
+        var keyChar = "";
+
+        
+        if(code == 8){
+            content = document.getElementById("output").innerHTML;
+            newContent = content.slice(0, content.length - 1);
+            document.getElementById("output").innerHTML = newContent;
+        }
+        else{
+            if(code == 13){
+                keyChar = "<br />";
+            }
+            else if(Ascii.hasOwnProperty(code)){
+                code = Ascii["code"];
+            }
+            keyChar = String.fromCharCode(code);
+            document.getElementById("output").innerHTML += keyChar;
+        }
+    }
+
+    // document.onkeydown = keyPressed;
+    // document.onkeyup = keyReleased;
+    document.addEventListener("keydown", keyPressed);
+    document.addEventListener("keyup", keyReleased);
+    document.addEventListener("keypress", input);
 }
